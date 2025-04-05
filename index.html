@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Сердце из линий</title>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet>
+    <title>Анимированное сердце</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
@@ -40,6 +40,7 @@
         const canvas = document.getElementById('heartCanvas');
         const ctx = canvas.getContext('2d');
         
+        // Настройка размеров холста
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -47,14 +48,18 @@
             center.y = canvas.height / 2;
         }
         
+        // Параметры анимации
         let angle = 0;
         const speed = 0.015;
         const maxLines = 3000;
         let linesDrawn = 0;
         const center = { x: 0, y: 0 };
+        
+        // Инициализация
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
+        // Формула сердца
         function getHeartPoint(t, scale) {
             t *= Math.PI;
             return {
@@ -63,27 +68,34 @@
             };
         }
 
+        // Главный цикл анимации
         function animate() {
+            // Настройка стиля линии
             ctx.strokeStyle = `hsl(${angle * 50}, 100%, 50%)`;
             ctx.lineWidth = 1.5;
             
+            // Расчет позиции
             const screenSize = Math.min(canvas.width, canvas.height);
             const scale = screenSize * 0.25;
             const point = getHeartPoint(angle, scale);
             
+            // Рисование линии
             ctx.beginPath();
             ctx.moveTo(center.x, center.y);
             ctx.lineTo(center.x + point.x, center.y + point.y);
             ctx.stroke();
 
+            // Обновление параметров
             angle += speed;
             linesDrawn++;
             
+            // Продолжение анимации
             if (linesDrawn < maxLines) {
                 requestAnimationFrame(animate);
             }
         }
 
+        // Запуск анимации
         animate();
     </script>
 </body>

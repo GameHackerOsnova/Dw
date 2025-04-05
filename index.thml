@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Сердце из линий</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        canvas {
+            display: block;
+        }
+        .birthday-text {
+            position: absolute;
+            top: 20%;
+            color: #ff69b4;
+            font-family: 'Pacifico', cursive;
+            font-size: 4em;
+            text-align: center;
+            text-shadow: 0 0 10px #ff1493, 0 0 20px #ff69b4;
+            animation: glow 2s ease-in-out infinite;
+            z-index: 1;
+        }
+        @keyframes glow {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+    </style>
+</head>
+<body>
+    <div class="birthday-text">С ДР🎉</div>
+    <canvas id="heartCanvas"></canvas>
+
+    <!-- Остальной скрипт без изменений -->
+    <script>
+        const canvas = document.getElementById('heartCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        let angle = 0;
+        const speed = 0.02;
+        const maxLines = 1000;
+        let linesDrawn = 0;
+        const center = {
+            x: canvas.width / 2,
+            y: canvas.height / 2
+        };
+
+        function getHeartPoint(t, scale) {
+            t *= Math.PI;
+            return {
+                x: 16 * Math.pow(Math.sin(t), 3) * scale,
+                y: -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t)) * scale
+            };
+        }
+
+        function animate() {
+            ctx.strokeStyle = `hsl(${angle * 50}, 100%, 50%)`;
+            ctx.lineWidth = 2;
+            
+            const scale = Math.min(canvas.width, canvas.height) * 0.1;
+            const point = getHeartPoint(angle, scale);
+            
+            ctx.beginPath();
+            ctx.moveTo(center.x, center.y);
+            ctx.lineTo(center.x + point.x, center.y + point.y);
+            ctx.stroke();
+
+            angle += speed;
+            linesDrawn++;
+            
+            if (linesDrawn < maxLines) {
+                requestAnimationFrame(animate);
+            }
+        }
+
+        animate();
+    </script>
+</body>
+</html>

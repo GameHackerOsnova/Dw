@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Сердце из линий</title>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet>
     <style>
         body {
             margin: 0;
@@ -17,7 +17,7 @@
         }
         .birthday-text {
             position: absolute;
-            top: 20%;
+            top: 10%;
             color: #ff69b4;
             font-family: 'Pacifico', cursive;
             font-size: 4em;
@@ -36,7 +36,6 @@
     <div class="birthday-text">С ДР🎉</div>
     <canvas id="heartCanvas"></canvas>
 
-    <!-- Остальной скрипт без изменений -->
     <script>
         const canvas = document.getElementById('heartCanvas');
         const ctx = canvas.getContext('2d');
@@ -44,18 +43,17 @@
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            center.x = canvas.width / 2;
+            center.y = canvas.height / 2;
         }
+        
+        let angle = 0;
+        const speed = 0.015;
+        const maxLines = 3000;
+        let linesDrawn = 0;
+        const center = { x: 0, y: 0 };
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
-
-        let angle = 0;
-        const speed = 0.02;
-        const maxLines = 1000;
-        let linesDrawn = 0;
-        const center = {
-            x: canvas.width / 2,
-            y: canvas.height / 2
-        };
 
         function getHeartPoint(t, scale) {
             t *= Math.PI;
@@ -67,9 +65,10 @@
 
         function animate() {
             ctx.strokeStyle = `hsl(${angle * 50}, 100%, 50%)`;
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 1.5;
             
-            const scale = Math.min(canvas.width, canvas.height) * 0.1;
+            const screenSize = Math.min(canvas.width, canvas.height);
+            const scale = screenSize * 0.25;
             const point = getHeartPoint(angle, scale);
             
             ctx.beginPath();
